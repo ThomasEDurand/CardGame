@@ -25,7 +25,7 @@ public class Deck {
 
   public Card drawCard(){
     if(cards.size() == 0){
-      return new Card(4, 4, 4, 4);
+      return new Card(3, 3, 3, 3);
     }
 
     int randomNum = ThreadLocalRandom.current().nextInt(0, cards.size());

@@ -10,9 +10,11 @@ import javafx.scene.text.Text;
 
 public class OverheadDisplay implements FXComponent{
   private ControllerImpl controller;
+  private int playerCount;
 
   public OverheadDisplay(ControllerImpl controller){
     this.controller = controller;
+    this.playerCount = controller.getPlayerCount();
   }
 
 
@@ -25,8 +27,6 @@ public class OverheadDisplay implements FXComponent{
     Text filler1 = new Text("        " );
     gridPane.add(filler1,1, 0);
 
-    Text sets = new Text("Sets: " + controller.getSets());
-    gridPane.add(sets,2, 0);
 
     Text filler2 = new Text("        ");
     gridPane.add(filler2, 3, 0);
@@ -44,13 +44,24 @@ public class OverheadDisplay implements FXComponent{
       gridPane.add(drawThree, 4, 0);
     } else {
       Button endGame = new Button();
-      endGame.setOnMousePressed(
-          (MouseEvent event) -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-              // Text endText = new Text("You got " + controller.getSets()+ " sets");
-              System.out.println("You got " + controller.getSets()+ " sets");
-            }
-          });
+      if(playerCount == 1) {
+        endGame.setOnMousePressed(
+            (MouseEvent event) -> {
+              if (event.getButton() == MouseButton.PRIMARY) {
+                // Text endText = new Text("You got " + controller.getSets()+ " sets");
+                System.out.println("You got " + controller.getSets(0) + " sets");
+              }
+            });
+      } else {
+        endGame.setOnMousePressed(
+            (MouseEvent event) -> {
+              if (event.getButton() == MouseButton.PRIMARY) {
+                // Text endText = new Text("You got " + controller.getSets()+ " sets");
+                System.out.println("Player one got " + controller.getSets(0) + " sets");
+                System.out.println("Player one got " + controller.getSets(1) + " sets");
+              }
+            });
+      }
       endGame.setText("End");
       gridPane.add(endGame, 4, 0);
     }

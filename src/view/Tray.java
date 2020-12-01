@@ -11,26 +11,32 @@ import model.Card;
 import model.Card.color;
 import model.Card.fill;
 import model.Card.shape;
-import model.Card.shapeCount;
 
 public class Tray implements FXComponent{
   private ControllerImpl controller;
   private int c;
+  private int playerNumber;
+  private final int opponentNumber;
 
-  public Tray(ControllerImpl controller) {
+  public Tray(ControllerImpl controller, int playerNumber) {
     this.controller = controller;
+    this.playerNumber = playerNumber;
+    this.opponentNumber = (int) Math.pow(playerNumber - 1, 2);
   }
 
   @Override
   public Parent render() {
     GridPane gridPane = new GridPane();
+
+    Text sets = new Text("Sets: " + controller.getSets(playerNumber));
+    gridPane.add(sets,0, 0);
     Text t = new Text("Selected");
-    gridPane.add(t, 0, 0);
+    gridPane.add(t, 0, 1);
     c = 0;
 
 
     for(int i = 0; i < 3; i++){
-      Card card = controller.getSelected(i);
+      Card card = controller.getSelected(playerNumber, i);
       if(card == null){
         continue;
       }
@@ -48,58 +54,55 @@ public class Tray implements FXComponent{
         buttonShape = "";
       }
 
-      int count;
-      if (card.getShapeCount() == shapeCount.ONE){
-        count = 1;
-      } else if (card.getShapeCount() == shapeCount.TWO){
-        count = 2;
-      } else if (card.getShapeCount() == shapeCount.THREE) {
-        count = 3;
-      } else {
-        count = 0;
-      }
 
       String buttonString = "";
-      for(int k = 0; k < count; k++){
+      for(int k = 0; k <= card.getShapeCount(); k++){
         buttonString += buttonShape;
       }
 
-      if (card.getFill() == fill.SOLID) {
-        buttonString += " So";
-      } else if (card.getFill() == fill.SHADED) {
-        buttonString += " Sh";
-      } else if (card.getFill() == fill.HOLLOW) {
-        buttonString += " Cl";
-      } else {
-        buttonString = "";
+      switch (card.getFill()){
+        case SOLID:
+          buttonString += " So";
+          break;
+        case SHADED:
+          buttonString += " Sh";
+          break;
+        case HOLLOW:
+          buttonString += " Cl";
+          break;
+        case BLANK:
+          buttonString = "";
       }
 
       gridButton.setText(buttonString);
 
-      if (card.getColor() == color.RED) {
-        gridButton.setStyle("-fx-text-fill: red");
-      } else if (card.getColor() == color.GREEN) {
-        gridButton.setStyle("-fx-text-fill: green");
-      } else if (card.getColor() == color.PURPLE) {
-        gridButton.setStyle("-fx-text-fill: purple");
-      } else {
-        gridButton.setStyle("-fx-text-fill: white");
+      switch(card.getColor()){
+        case RED:
+          gridButton.setStyle("-fx-text-fill: red");
+          break;
+        case GREEN:
+          gridButton.setStyle("-fx-text-fill: green");
+          break;
+        case PURPLE:
+          gridButton.setStyle("-fx-text-fill: purple");
+          break;
+        case BLANK:
+          gridButton.setStyle("-fx-text-fill: white");
+          break;
       }
-
 
       gridButton.setOnMousePressed(
           (MouseEvent event) -> {
             if (event.getButton() == MouseButton.PRIMARY) {
-              controller.deselectCard(card);
+              controller.deselectCard(playerNumber, card);
             } // do not want functionality for buttons besides m1
           });
-
 
       gridButton.setMaxHeight(96);
       gridButton.setMinHeight(96);
       gridButton.setMaxWidth(96);
       gridButton.setMinWidth(96);
-      gridPane.add(gridButton, 0, i + 1);
+      gridPane.add(gridButton, 0, i + 2);
       c++;
     }
 
@@ -109,9 +112,8 @@ public class Tray implements FXComponent{
       set.setOnMousePressed(
           (MouseEvent event) -> {
             if (event.getButton() == MouseButton.PRIMARY) {
-              if (controller.isSet()) {
-                // TODO
-                controller.setFound();
+              if (controller.isSet(playerNumber)) {
+                controller.setFound(playerNumber);
               } else {
                 System.out.println("Not a set");
               }// do not want functionality for buttons besides m1
@@ -119,7 +121,7 @@ public class Tray implements FXComponent{
           });
 
       set.setText("set");
-      gridPane.add(set,0, c + 1);
+      gridPane.add(set,0, c + 2);
     }
 
     return gridPane;

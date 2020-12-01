@@ -23,23 +23,17 @@ public class Card {
     BLANK
   }
 
-  public enum shapeCount {
-    ONE,
-    TWO,
-    THREE,
-    BLANK
-  }
 
   private final shape cardShape;
   private final color cardColor;
   private final fill cardFill;
-  private final shapeCount cardShapeCount;
+  private final int cardShapeCount;
 
   public Card(int shapeI, int colorI, int fillI, int shapeCountI){
     this.cardShape = shape.values()[shapeI];
     this.cardColor = color.values()[colorI];
     this.cardFill = fill.values()[fillI];
-    this.cardShapeCount = shapeCount.values()[shapeCountI];
+    this.cardShapeCount = shapeCountI;
   }
 
   public shape getShape(){
@@ -54,12 +48,12 @@ public class Card {
     return cardFill;
   }
 
-  public shapeCount getShapeCount(){
+  public int getShapeCount(){
     return cardShapeCount;
   }
 
   public boolean isBlankCard(){
-    return ((this.cardColor == color.BLANK) && (this.cardFill == fill.BLANK) && (this.cardShapeCount == shapeCount.BLANK) && (this.cardShape == shape.BLANK));
+    return ((this.cardColor == color.BLANK) && (this.cardFill == fill.BLANK) && (this.cardShapeCount == 3) && (this.cardShape == shape.BLANK));
   }
 
   public boolean isSameCard(Card other){

@@ -8,9 +8,11 @@ import javafx.scene.layout.BorderPane;
 
 public class View implements FXComponent {
   ControllerImpl controller;
+  private final int players;
 
   public View(ControllerImpl controller) {
     this.controller = controller;
+    this.players = controller.getPlayerCount();
   }
 
   @Override
@@ -25,10 +27,17 @@ public class View implements FXComponent {
     layout.setMargin(boardNode, insets);
 
 
-    Tray tray = new Tray(controller);
-    Node trayNode = tray.render();
-    layout.setRight(trayNode);
-    layout.setMargin(trayNode, insets);
+    Tray leftTray = new Tray(controller, 0);
+    Node leftTrayNode = leftTray.render();
+    layout.setLeft(leftTrayNode);
+    layout.setMargin(leftTrayNode, insets);
+
+    if(players == 2){
+      Tray rightTray = new Tray(controller, 1);
+      Node rightTrayNode = rightTray.render();
+      layout.setRight(rightTrayNode);
+      layout.setMargin(rightTrayNode, insets);
+    }
 
     OverheadDisplay display = new OverheadDisplay(controller);
     Node displayNode = display.render();

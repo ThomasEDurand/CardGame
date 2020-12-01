@@ -11,7 +11,6 @@ import model.Card;
 import model.Card.color;
 import model.Card.fill;
 import model.Card.shape;
-import model.Card.shapeCount;
 
 public class DisplayBoard implements FXComponent {
   private ControllerImpl controller;
@@ -38,7 +37,7 @@ public class DisplayBoard implements FXComponent {
         int finalI = i;
         int finalJ = j;
 
-        Card card = controller.getCard(finalI, finalJ);
+        Card card = controller.getCard(0,finalI, finalJ);
         Button gridButton = new Button();
 
         String buttonShape;
@@ -52,19 +51,9 @@ public class DisplayBoard implements FXComponent {
           buttonShape = "";
         }
 
-        int count;
-        if (card.getShapeCount() == shapeCount.ONE){
-          count = 1;
-        } else if (card.getShapeCount() == shapeCount.TWO){
-          count = 2;
-        } else if (card.getShapeCount() == shapeCount.THREE) {
-          count = 3;
-        } else {
-          count = 0;
-        }
 
         String buttonString = "";
-        for(int k = 0; k < count; k++){
+        for(int k = 0; k <= card.getShapeCount(); k++){
           buttonString += buttonShape;
         }
 
@@ -81,23 +70,28 @@ public class DisplayBoard implements FXComponent {
 
         gridButton.setText(buttonString);
 
-        if (card.getColor() == color.RED) {
-          gridButton.setStyle("-fx-text-fill: red");
-        } else if (card.getColor() == color.GREEN) {
-          gridButton.setStyle("-fx-text-fill: green");
-        } else if (card.getColor() == color.PURPLE) {
-          gridButton.setStyle("-fx-text-fill: purple");
-        } else {
-          gridButton.setStyle("-fx-text-fill: white");
+        switch(card.getColor()){
+          case RED:
+            gridButton.setStyle("-fx-text-fill: red");
+            break;
+          case GREEN:
+            gridButton.setStyle("-fx-text-fill: green");
+            break;
+          case PURPLE:
+            gridButton.setStyle("-fx-text-fill: purple");
+            break;
+          case BLANK:
+            gridButton.setStyle("-fx-text-fill: white");
+            break;
         }
 
 
         gridButton.setOnMousePressed(
             (MouseEvent event) -> {
               if (event.getButton() == MouseButton.PRIMARY) {
-                controller.selectCard(card);
+                controller.selectCard(0, card);
               } else if (event.getButton() == MouseButton.SECONDARY) {
-                controller.deselectCard(card);
+                controller.selectCard(1, card);
               } // do not want functionality for buttons besides m1 and m2
             });
 

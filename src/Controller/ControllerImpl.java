@@ -5,48 +5,54 @@ import model.Card;
 import model.Model;
 
 public class ControllerImpl {
-  Model model;
+  Model[] models;
 
-  public ControllerImpl(Model model){
-    this.model = model;
+  public ControllerImpl(Model[] model){
+    this.models = model;
   }
 
-  public Card getCard(int row, int col){
-    return model.getCard(row, col);
+  public Card getCard(int model, int row, int col){
+    return models[model].getCard(row, col);
   }
 
-  public void selectCard(Card card){
-    model.selectCard(card);
+  public void selectCard(int modelNo, Card card){
+    models[modelNo].selectCard(card);
   }
 
-  public void deselectCard(Card card){
-    model.deselectCard(card);
+  public void deselectCard(int modelNo, Card card){
+    models[modelNo].deselectCard(card);
   }
 
-  public boolean isSet(){
-    return  model.isSet();
+  public boolean isSet(int modelNo){ return  models[modelNo].isSet();
   }
 
   public void addCards(){
-    model.addCards();
+    models[0].addCards();
   }
 
   public int getWidth() {
-    return model.getWidth();
+    return models[0].getWidth();
   }
 
-  public Card getSelected(int cardNo){
-    return model.getSelected(cardNo);
+  public Card getSelected(int modelNo, int cardNo){
+    return models[modelNo].getSelected(cardNo);
   }
 
   public int getCount(){
-    return model.getCount();
+    return models[0].getCount();
   }
 
-  public int getSets() {return model.getSets();}
+  public int getSets(int modelNo) {
+    return models[modelNo].getSets();
+  }
 
-  public void setFound(){
-    model.setFound();
+  public void setFound(int playerNo){
+    models[(int) Math.pow(playerNo - 1 , 2)].opponentFoundSet(models[playerNo].setFound());
+  }
+
+
+  public int getPlayerCount(){
+    return models.length;
   }
 
 }

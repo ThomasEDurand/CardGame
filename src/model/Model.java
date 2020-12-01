@@ -12,14 +12,14 @@ public class Model {
 
   ArrayList<ModelObserver> modelObservers;
 
-  public Model(){
+  public Model(Board board){
     modelObservers = new ArrayList<>();
     sets = 0;
     this.card1 = null;
     this.card2 = null;
     this.card3 = null;
 
-    this.board = new Board();
+    this.board = board;
   }
 
   public void addObserver(ModelObserver observer) {
@@ -41,11 +41,13 @@ public class Model {
   }
 
   public void selectCard(Card card){
-    if(card1 == null && !card.isBlankCard()){
+    if(card.isBlankCard()){
+
+    } else if(card1 == null){
       card1 = card;
-    } else if (card2 == null && !card.isBlankCard() && card != card1){
+    } else if (card2 == null && card != card1){
       card2 = card;
-    } else if (card3 == null && !card.isBlankCard() && card != card1 && card != card2){
+    } else if (card3 == null && card != card1 && card != card2){
       card3 = card;
     }
     notifyObs();
@@ -94,20 +96,43 @@ public class Model {
     return true;
   }
 
-  public void setFound (){
-    removeCards();
-    addCards();
-    notifyObs();
+  public Card[] setFound (){
+    removeCards(); // from board
+    addCards(); // from board
 
+    Card c1 = card1;
+    Card c2 = card2;
+    Card c3 = card3;
+
+    Card[] cards = new Card[]{c1, c2, c3};
     card1 = card2 = card3 = null;
     sets++;
     notifyObs();
+    return cards;
   }
+
+  public void opponentFoundSet(Card[] cards){
+    int skipped = 0;
+    for(int i = 0; i < cards.length; i++){
+      if(card1 != null && cards[i] != null && card1.isSameCard(cards[i])){
+        card1 = null;
+      }
+      if(card2 != null && cards[i] != null && card2.isSameCard(cards[i])){
+        card2 = null;
+      }
+      if(card3 != null && cards[i] != null && card3.isSameCard(cards[i])){
+        card3 = null;
+      }
+    }
+    notifyObs();
+  }
+
 
   public void removeCards(){
     board.removeCard(card1);
     board.removeCard(card2);
     board.removeCard(card3);
+    notifyObs();
   }
 
   public void addCards(){
@@ -125,7 +150,9 @@ public class Model {
     return board.getCount();
   }
 
-  public int getSets() {return sets; }
+  public int getSets() {
+    return sets;
+  }
 
   public int getWidth() {return board.getWidth(); }
 
