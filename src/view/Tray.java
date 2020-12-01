@@ -1,11 +1,19 @@
 package view;
 
 import Controller.ControllerImpl;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.TilePane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import model.Card;
 import model.Card.color;
@@ -28,6 +36,7 @@ public class Tray implements FXComponent{
   public Parent render() {
     GridPane gridPane = new GridPane();
 
+
     Text sets = new Text("Sets: " + controller.getSets(playerNumber));
     gridPane.add(sets,0, 0);
     Text t = new Text("Selected");
@@ -40,56 +49,9 @@ public class Tray implements FXComponent{
       if(card == null){
         continue;
       }
-      Button gridButton = new Button();
 
+      Button gridButton = CardToButton.createButton(card);
 
-      String buttonShape;
-      if (card.getShape() == shape.OVAL.OVAL){
-        buttonShape = "O";
-      } else if (card.getShape() == shape.RHOMBUS){
-        buttonShape = "<>";
-      } else if (card.getShape() == shape.SQUIGGLE) {
-        buttonShape = "S";
-      } else {
-        buttonShape = "";
-      }
-
-
-      String buttonString = "";
-      for(int k = 0; k <= card.getShapeCount(); k++){
-        buttonString += buttonShape;
-      }
-
-      switch (card.getFill()){
-        case SOLID:
-          buttonString += " So";
-          break;
-        case SHADED:
-          buttonString += " Sh";
-          break;
-        case HOLLOW:
-          buttonString += " Cl";
-          break;
-        case BLANK:
-          buttonString = "";
-      }
-
-      gridButton.setText(buttonString);
-
-      switch(card.getColor()){
-        case RED:
-          gridButton.setStyle("-fx-text-fill: red");
-          break;
-        case GREEN:
-          gridButton.setStyle("-fx-text-fill: green");
-          break;
-        case PURPLE:
-          gridButton.setStyle("-fx-text-fill: purple");
-          break;
-        case BLANK:
-          gridButton.setStyle("-fx-text-fill: white");
-          break;
-      }
 
       gridButton.setOnMousePressed(
           (MouseEvent event) -> {
@@ -98,10 +60,6 @@ public class Tray implements FXComponent{
             } // do not want functionality for buttons besides m1
           });
 
-      gridButton.setMaxHeight(96);
-      gridButton.setMinHeight(96);
-      gridButton.setMaxWidth(96);
-      gridButton.setMinWidth(96);
       gridPane.add(gridButton, 0, i + 2);
       c++;
     }
@@ -123,6 +81,7 @@ public class Tray implements FXComponent{
       set.setText("set");
       gridPane.add(set,0, c + 2);
     }
+
 
     return gridPane;
   }
