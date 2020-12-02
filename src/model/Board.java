@@ -37,37 +37,64 @@ public class Board {
         }
       }
     }
+
   }
 
   public void addCard(){
     if(deck.getCount() == 0){
-      return;
-    }
+      reorganizeBoard();
+    } else {
 
-    for(int i = 0; i < board.size(); i++){
-      for(int j = 0; j < board.get(0).size(); j++){
-        if (board.get(i).size() == j){
-          continue;
+      for (int i = 0; i < board.size(); i++) {
+        for (int j = 0; j < board.get(i).size(); j++) {
+          if (board.get(i).get(j).isBlankCard()) {
+            board.get(i).set(j, deck.drawCard());
+            return;
+          }
         }
-        if (board.get(i).get(j).isBlankCard()){
-          board.get(i).set(j, deck.drawCard());
-          return;
+      }
+
+      // Case 1: rows are the same length
+      if (board.get(0).size() == board.get(0).size() && board.get(0).size() == board.get(2)
+          .size()) {
+        board.get(0).add(deck.drawCard());
+        // Case 2: row1 is the longest, row2 and row3 are the same length
+      } else if ((board.get(0).size() > board.get(1).size()) && (board.get(1).size() == board.get(2)
+          .size())) {
+        board.get(1).add(deck.drawCard());
+        // Case 3: row1 and row2 are the same in size, row3 is shorter
+      } else if (board.get(0).size() == board.get(1).size() && (board.get(1).size() > board.get(2)
+          .size())) {
+        board.get(2).add(deck.drawCard());
+      } else {
+        throw new IllegalStateException("Error in addCard method");
+      }
+    }
+  }
+
+  public void reorganizeBoard () {
+
+    ArrayList<Card> pile = new ArrayList<>();
+    for(int i = 0; i < board.size(); i++){
+      for(int j = 0; j < board.get(i).size(); j++){
+        if (board.get(i).get(j) != null && !board.get(i).get(j).isBlankCard()) {
+          pile.add(board.get(i).get(j));
         }
       }
     }
 
-    // Case 1: rows are the same length
-    if(board.get(0).size() == board.get(0).size() && board.get(0).size() == board.get(2).size()){
-      board.get(0).add(deck.drawCard());
-      // Case 2: row1 is the longest, row2 and row3 are the same length
-    } else if ((board.get(0).size() > board.get(1).size()) &&  (board.get(1).size() == board.get(2).size())) {
-      board.get(1).add(deck.drawCard());
-      // Case 3: row1 and row2 are the same in size, row3 is shorter
-    } else if (board.get(0).size() == board.get(1).size() && (board.get(1).size() > board.get(2).size())){
-      board.get(2).add(deck.drawCard());
-    } else {
-      throw new IllegalStateException("Error in addCard method");
+    row1.clear();
+    row2.clear();
+    row3.clear();
+
+
+    int index = 0;
+    while (pile.size() > index){
+      board.get(index % 3).add(pile.get(index));
+      index++;
     }
+
+
   }
 
   public int getCount(){

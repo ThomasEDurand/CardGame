@@ -67,7 +67,7 @@ public class CardToButton {
         }
       }
 
-    } else if (card.getShape() == shape.SQUIGGLE) {
+    } else if (card.getShape() == shape.TRIANGLE) {
       for(int k = 0; k <= card.getShapeCount(); k++) {
         Polygon triangle = new Polygon();
         triangle.getPoints().addAll(
@@ -85,7 +85,7 @@ public class CardToButton {
         } else if (card.getFill() == fill.SHADED) {
           triangle.setFill(color);
           triangle.setStrokeType(StrokeType.INSIDE);
-          triangle.setStrokeWidth(4);
+          triangle.setStrokeWidth(3);
           triangle.setStroke(Color.BLACK);
           buttonPane.add(triangle, k, 0);
         }

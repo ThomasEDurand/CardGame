@@ -36,7 +36,7 @@ public class OverheadDisplay implements FXComponent{
       drawThree.setOnMousePressed(
           (MouseEvent event) -> {
             if (event.getButton() == MouseButton.PRIMARY) {
-              controller.addCards();
+              controller.addCards(true);
             }
           });
 

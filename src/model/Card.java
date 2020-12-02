@@ -5,7 +5,7 @@ public class Card {
   public enum shape {
     OVAL,
     RHOMBUS,
-    SQUIGGLE,
+    TRIANGLE,
     BLANK
   }
 

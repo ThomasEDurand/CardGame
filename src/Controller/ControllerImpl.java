@@ -11,8 +11,8 @@ public class ControllerImpl {
     this.models = model;
   }
 
-  public Card getCard(int model, int row, int col){
-    return models[model].getCard(row, col);
+  public Card getCard(int row, int col){
+    return models[0].getCard(row, col);
   }
 
   public void selectCard(int modelNo, Card card){
@@ -26,8 +26,8 @@ public class ControllerImpl {
   public boolean isSet(int modelNo){ return  models[modelNo].isSet();
   }
 
-  public void addCards(){
-    models[0].addCards();
+  public void addCards(boolean rerender){
+    models[0].addCards(rerender);
   }
 
   public int getWidth() {

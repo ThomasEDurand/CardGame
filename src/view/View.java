@@ -21,10 +21,7 @@ public class View implements FXComponent {
     BorderPane layout = new BorderPane();
     Insets insets = new Insets(10);
 
-    DisplayBoard board = new DisplayBoard(controller);
-    Node boardNode = board.render();
-    layout.setCenter(boardNode);
-    layout.setMargin(boardNode, insets);
+
 
 
     Tray leftTray = new Tray(controller, 0);
@@ -38,6 +35,11 @@ public class View implements FXComponent {
       layout.setRight(rightTrayNode);
       layout.setMargin(rightTrayNode, insets);
     }
+
+    DisplayBoard board = new DisplayBoard(controller);
+    Node boardNode = board.render();
+    layout.setCenter(boardNode);
+    layout.setMargin(boardNode, insets);
 
     OverheadDisplay display = new OverheadDisplay(controller);
     Node displayNode = display.render();

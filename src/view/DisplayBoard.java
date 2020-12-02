@@ -17,14 +17,12 @@ import model.Card.fill;
 import model.Card.shape;
 
 public class DisplayBoard implements FXComponent {
-  private final ControllerImpl controller;
+  private ControllerImpl controller;
   private final int height;
-  private final int width;
 
   public DisplayBoard(ControllerImpl controller) {
     this.controller = controller;
     this.height = 3;
-    this.width = controller.getWidth();
   }
 
   @Override
@@ -35,11 +33,10 @@ public class DisplayBoard implements FXComponent {
     gridPane.setVgap(5); // set gap in pixels
 
     for (int i = 0; i < height; i++) {
-      for (int j = 0; j < width; j++) {
+      for (int j = 0; j < controller.getWidth(); j++) {
 
-        Card card = controller.getCard(0, i, j);
+        Card card = controller.getCard(i, j);
         Button gridButton = CardToButton.createButton(card);
-
 
         gridButton.setOnMousePressed(
             (MouseEvent event) -> {

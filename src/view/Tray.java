@@ -24,12 +24,11 @@ public class Tray implements FXComponent{
   private ControllerImpl controller;
   private int c;
   private int playerNumber;
-  private final int opponentNumber;
+
 
   public Tray(ControllerImpl controller, int playerNumber) {
     this.controller = controller;
     this.playerNumber = playerNumber;
-    this.opponentNumber = (int) Math.pow(playerNumber - 1, 2);
   }
 
   @Override

@@ -98,7 +98,7 @@ public class Model {
 
   public Card[] setFound (){
     removeCards(); // from board
-    addCards(); // from board
+    addCards(false); // from board
 
     Card c1 = card1;
     Card c2 = card2;
@@ -107,20 +107,18 @@ public class Model {
     Card[] cards = new Card[]{c1, c2, c3};
     card1 = card2 = card3 = null;
     sets++;
-    notifyObs();
     return cards;
   }
 
   public void opponentFoundSet(Card[] cards){
-    int skipped = 0;
-    for(int i = 0; i < cards.length; i++){
-      if(card1 != null && cards[i] != null && card1.isSameCard(cards[i])){
+    for (Card card : cards) {
+      if (card1 != null && card != null && card1.isSameCard(card)) {
         card1 = null;
       }
-      if(card2 != null && cards[i] != null && card2.isSameCard(cards[i])){
+      if (card2 != null && card != null && card2.isSameCard(card)) {
         card2 = null;
       }
-      if(card3 != null && cards[i] != null && card3.isSameCard(cards[i])){
+      if (card3 != null && card != null && card3.isSameCard(card)) {
         card3 = null;
       }
     }
@@ -135,15 +133,17 @@ public class Model {
     notifyObs();
   }
 
-  public void addCards(){
-    int addCount = 3;
-    if (board.getCount() < 3){
-      addCount = board.getCount();
+  public void addCards(Boolean rerender){
+    if (getCount() == 0) {
+        board.addCard();
+    } else {
+      for (int i = 0; i < 3; i++) {
+        board.addCard();
+      }
     }
-    for(int i = 0; i < addCount; i++){
-      board.addCard();
+    if (rerender) {
+      notifyObs();
     }
-    notifyObs();
   }
 
   public int getCount(){
